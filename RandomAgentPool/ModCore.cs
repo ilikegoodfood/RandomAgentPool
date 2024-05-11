@@ -28,8 +28,6 @@ namespace RandomAgentPool
 
         public List<UAE_Abstraction> uniqueAgents_Master;
 
-        public List<UAE_Abstraction> uniqueAgents_Buffer;
-
         public List<UAE_Abstraction> genericAgents_Master;
 
         public God_Eternity brokenMaker = null;
@@ -91,7 +89,6 @@ namespace RandomAgentPool
                 brokenMaker = eternal;
 
                 brokenMakerSleepDuration = sleepDurationBase();
-                uniqueAgents_Buffer = new List<UAE_Abstraction>();
             }
         }
 
@@ -242,11 +239,6 @@ namespace RandomAgentPool
                         brokenMakerSleepDuration = sleepDurationBase();
                     }
                 }
-                else
-                {
-                    uniqueAgents_Buffer.Clear();
-                    uniqueAgents_Buffer.AddRange(brokenMaker.agentBuffer);
-                }
             }
         }
 
@@ -255,7 +247,7 @@ namespace RandomAgentPool
             List<UAE_Abstraction> agentPool = new List<UAE_Abstraction>();
             agentPool.AddRange(uniqueAgents_Master);
 
-            foreach (UAE_Abstraction agent in uniqueAgents_Buffer)
+            foreach (UAE_Abstraction agent in brokenMaker.agentBuffer2)
             {
                 agentPool.Remove(agent);
             }
