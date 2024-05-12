@@ -10,7 +10,7 @@ namespace RandomAgentPool
 {
     public class ModCore : ModKernel
     {
-        public bool opt_rollIndividuallyUnique = false;
+        public static bool opt_rollIndividuallyUnique = false;
 
         public static bool opt_rollIndividuallyGeneric = false;
 
@@ -29,6 +29,8 @@ namespace RandomAgentPool
         public List<UAE_Abstraction> uniqueAgents_Master;
 
         public List<UAE_Abstraction> genericAgents_Master;
+
+        public bool runSingleton = false;
 
         public God_Eternity brokenMaker = null;
 
@@ -92,42 +94,47 @@ namespace RandomAgentPool
             }
         }
 
-        public override void afterMapGenAfterHistorical(Map map)
+        public override void onTurnStart(Map map)
         {
-            if (brokenMaker != null)
+            if (!runSingleton && map.burnInComplete)
             {
-                uniqueAgents_Master = new List<UAE_Abstraction>();
-                uniqueAgents_Master.AddRange(map.overmind.agentsUnique);
+                runSingleton = true;
 
-                genericAgents_Master = new List<UAE_Abstraction>();
-                genericAgents_Master.AddRange(map.overmind.agentsGeneric);
-            }
+                if (brokenMaker != null)
+                {
+                    uniqueAgents_Master = new List<UAE_Abstraction>();
+                    uniqueAgents_Master.AddRange(map.overmind.agentsUnique);
 
-            
-            if (opt_rollIndividuallyUnique)
-            {
-                trimIndividuallyToPercentage(map.overmind.agentsUnique, opt_keepPercentageUnique);
-            }
-            else if (opt_exactCountUnique)
-            {
-                trimToCount(map.overmind.agentsUnique, opt_keepNumberUnique);
-            }
-            else
-            {
-                trimToPercentage(map.overmind.agentsUnique, opt_keepPercentageUnique);
-            }
+                    genericAgents_Master = new List<UAE_Abstraction>();
+                    genericAgents_Master.AddRange(map.overmind.agentsGeneric);
+                }
 
-            if (opt_rollIndividuallyGeneric)
-            {
-                trimIndividuallyToPercentage(map.overmind.agentsGeneric, opt_keepPercentageGeneric, true);
-            }
-            else if (opt_exactCountGeneric)
-            {
-                trimToCount(map.overmind.agentsGeneric, opt_keepNumberGeeric, true);
-            }
-            else
-            {
-                trimToPercentage(map.overmind.agentsGeneric, opt_keepPercentageGeneric, true);
+
+                if (opt_rollIndividuallyUnique)
+                {
+                    trimIndividuallyToPercentage(map.overmind.agentsUnique, opt_keepPercentageUnique);
+                }
+                else if (opt_exactCountUnique)
+                {
+                    trimToCount(map.overmind.agentsUnique, opt_keepNumberUnique);
+                }
+                else
+                {
+                    trimToPercentage(map.overmind.agentsUnique, opt_keepPercentageUnique);
+                }
+
+                if (opt_rollIndividuallyGeneric)
+                {
+                    trimIndividuallyToPercentage(map.overmind.agentsGeneric, opt_keepPercentageGeneric, true);
+                }
+                else if (opt_exactCountGeneric)
+                {
+                    trimToCount(map.overmind.agentsGeneric, opt_keepNumberGeeric, true);
+                }
+                else
+                {
+                    trimToPercentage(map.overmind.agentsGeneric, opt_keepPercentageGeneric, true);
+                }
             }
         }
 
