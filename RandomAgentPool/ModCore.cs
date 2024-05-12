@@ -244,32 +244,41 @@ namespace RandomAgentPool
 
         public void onBrokenMakerSleep_StartOfSleep(Map map)
         {
-            List<UAE_Abstraction> agentPool = new List<UAE_Abstraction>();
-            agentPool.AddRange(uniqueAgents_Master);
+            List<UAE_Abstraction> agentPool = uniqueAgents_Master.ToList();
 
             foreach (UAE_Abstraction agent in brokenMaker.agentBuffer2)
             {
                 agentPool.Remove(agent);
             }
 
+            foreach (UAE_Abstraction agent in agentPool)
+            {
+                if (!map.overmind.agentsUnique.Contains(agent))
+                {
+                    map.overmind.agentsUnique.Add(agent);
+                }
+            }
+
             if (opt_rollIndividuallyUnique)
             {
-                trimIndividuallyToPercentage(agentPool, opt_keepPercentageUnique);
+                trimIndividuallyToPercentage(map.overmind.agentsUnique, opt_keepPercentageUnique);
             }
             else if (opt_exactCountUnique)
             {
-                trimToCount(agentPool, opt_keepNumberUnique);
+                trimToCount(map.overmind.agentsUnique, opt_keepNumberUnique);
             }
             else
             {
-                trimToPercentage(agentPool, opt_keepPercentageUnique);
+                trimToPercentage(map.overmind.agentsUnique, opt_keepPercentageUnique);
             }
 
-            map.overmind.agentsUnique.Clear();
-            map.overmind.agentsUnique.AddRange(agentPool);
-
-            map.overmind.agentsGeneric.Clear();
-            map.overmind.agentsGeneric.AddRange(genericAgents_Master);
+            foreach (UAE_Abstraction agent in genericAgents_Master)
+            {
+                if (!map.overmind.agentsGeneric.Contains(agent))
+                {
+                    map.overmind.agentsGeneric.Add(agent);
+                }
+            }
 
             if (opt_rollIndividuallyGeneric)
             {
