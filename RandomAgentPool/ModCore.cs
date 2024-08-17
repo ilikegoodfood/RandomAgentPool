@@ -40,7 +40,7 @@ namespace RandomAgentPool
 
         public int brokenMakerSleepDuration;
 
-        public int sleepDurationBase() => 50;
+        public int sleepDurationBase => 50;
 
         public override void receiveModConfigOpts_bool(string optName, bool value)
         {
@@ -86,11 +86,13 @@ namespace RandomAgentPool
 
         public override void beforeMapGen(Map map)
         {
+            runSingleton = false;
+
             if (map.overmind.god is God_Eternity eternal)
             {
                 brokenMaker = eternal;
 
-                brokenMakerSleepDuration = sleepDurationBase();
+                brokenMakerSleepDuration = sleepDurationBase;
             }
         }
 
@@ -243,7 +245,7 @@ namespace RandomAgentPool
                     {
                         brokenMakerSleeping = false;
                         onBrokenMakerSleep_EndOfSleep(map);
-                        brokenMakerSleepDuration = sleepDurationBase();
+                        brokenMakerSleepDuration = sleepDurationBase;
                     }
                 }
             }
